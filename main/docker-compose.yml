@@ -13,7 +13,7 @@ services:
       - db
 
   db:
-    image: mysql:5.7.22
+    image: mariadb
     restart: always
     environment:
       MYSQL_DATABASE: main

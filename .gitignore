@@ -3,5 +3,6 @@
 env/
 venv/
 .dbdata/
-main/migrations/
+__pycache__/
+migrations/
 main/__pycache__/
