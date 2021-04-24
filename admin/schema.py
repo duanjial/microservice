@@ -2,7 +2,6 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from products.models import Product
-from products.serializers import ProductSerializer
 
 
 class ProductType(DjangoObjectType):
