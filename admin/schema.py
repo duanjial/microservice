@@ -10,7 +10,7 @@ class ProductType(DjangoObjectType):
         fields = ("title", "image", "likes")
 
 
-class ProductMutation(graphene.Mutation):
+class UpdateProduct(graphene.Mutation):
     class Arguments:
         title = graphene.String()
         image = graphene.String()
@@ -23,7 +23,7 @@ class ProductMutation(graphene.Mutation):
         product.title = title
         product.image = image
         product.save()
-        return ProductMutation(product=product)
+        return UpdateProduct(product=product)
 
 
 class CreateProduct(graphene.Mutation):
@@ -56,7 +56,7 @@ class Query(graphene.ObjectType):
 
 
 class Mutation(graphene.ObjectType):
-    update_product = ProductMutation.Field()
+    update_product = UpdateProduct.Field()
     create_product = CreateProduct.Field()
 
 
