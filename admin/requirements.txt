@@ -5,3 +5,4 @@ django-mysql==3.9
 django-cors-headers==3.5.0
 pika==1.1.0
 redis==3.5.3
+graphene-django==2.15.0
