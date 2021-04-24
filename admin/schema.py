@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from products.models import Product
+from products.serializers import ProductSerializer
 
 
 class ProductType(DjangoObjectType):
@@ -26,6 +27,19 @@ class ProductMutation(graphene.Mutation):
         return ProductMutation(product=product)
 
 
+class CreateProduct(graphene.Mutation):
+    class Arguments:
+        title = graphene.String()
+        image = graphene.String()
+    product = graphene.Field(ProductType)
+
+    @classmethod
+    def mutate(cls, root, info, title, image):
+        product = Product(title=title, image=image)
+        product.save()
+        return CreateProduct(product=product)
+
+
 class Query(graphene.ObjectType):
     all_products = graphene.List(ProductType)
     product_by_title = graphene.Field(ProductType, title=graphene.String(required=True))
@@ -44,6 +58,7 @@ class Query(graphene.ObjectType):
 
 class Mutation(graphene.ObjectType):
     update_product = ProductMutation.Field()
+    create_product = CreateProduct.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)
