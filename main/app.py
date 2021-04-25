@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from producer import publish
 import requests
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, abort, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy import UniqueConstraint
+from downloader import Downloader
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@db/main'
@@ -54,6 +55,17 @@ def like(id):
 
     return jsonify({
         'message': 'success'
+    })
+
+
+@app.route('/api/download', methods=['POST'])
+def download():
+    request_data = request.get_json()
+    url = request_data['url']
+    print(url)
+    Downloader.download(url=url)
+    return jsonify({
+        'message': 'download success'
     })
 
 
