@@ -1,6 +1,6 @@
 import graphene
 from my_graphql.ProductType import ProductType
-from my_graphql.ProductMutation import UpdateProduct, CreateProduct
+from my_graphql.ProductMutation import UpdateProduct, CreateProduct, DeleteProduct
 from products.models import Product
 
 
@@ -23,6 +23,7 @@ class Query(graphene.ObjectType):
 class Mutation(graphene.ObjectType):
     update_product = UpdateProduct.Field()
     create_product = CreateProduct.Field()
+    delete_product = DeleteProduct.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

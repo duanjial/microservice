@@ -5,4 +5,4 @@ from products.models import Product
 class ProductType(DjangoObjectType):
     class Meta:
         model = Product
-        fields = ("title", "image", "likes")
+        fields = "__all__"
