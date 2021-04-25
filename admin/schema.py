@@ -1,15 +1,15 @@
 import graphene
-from my_graphql.ProductType import ProductType
+from my_graphql.ProductType import ProductType, ProductConnection
 from my_graphql.ProductMutation import UpdateProduct, CreateProduct, DeleteProduct
 from products.models import Product
 
 
 class Query(graphene.ObjectType):
-    all_products = graphene.List(ProductType)
+    all_products = graphene.relay.ConnectionField(ProductConnection)
     product_by_title = graphene.Field(ProductType, title=graphene.String(required=True))
 
     @staticmethod
-    def resolve_all_products(self, root):
+    def resolve_all_products(self, root, **kwargs):
         return Product.objects.all()
 
     @staticmethod
