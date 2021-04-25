@@ -7,3 +7,4 @@ downloadM3U8/
 __pycache__/
 migrations/
 main/__pycache__/
+key.json

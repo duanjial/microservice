@@ -6,3 +6,5 @@ django-cors-headers==3.5.0
 pika==1.1.0
 redis==3.5.3
 graphene-django==2.15.0
+google-cloud-pubsub==2.4.1
+avro==1.10.2

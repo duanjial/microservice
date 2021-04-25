@@ -5,3 +5,4 @@ RUN pip install -r requirements.txt
 COPY . /app
 ENV PYTHONUMBUFFERED 1
 ENV PYTHONPATH="/app:{$PYTHONPATH}"
+ENV GOOGLE_APPLICATION_CREDENTIALS /app/key.json

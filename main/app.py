@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from producer import publish
+from publisher import PubSubPublisher
 import requests
 from flask import Flask, jsonify, abort, request
 from flask_sqlalchemy import SQLAlchemy
@@ -12,7 +13,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@db/main'
 CORS(app)
 
 db = SQLAlchemy(app)
-
+PROJECT_ID = "microservice-311821"
+publisher = PubSubPublisher(PROJECT_ID)
 
 @dataclass
 class Product(db.Model):
@@ -63,8 +65,12 @@ def download():
     request_data = request.get_json()
     url = request_data['url']
     Downloader.download(url=url)
+    print("Finished downloading")
+    topic = "download"
+    # publisher.create_topic(topic)
+    publisher.publish_message(topic, f"new mp4 SUCCESSFULLY downloaded from {url}")
     return jsonify({
-        'message': 'download success'
+        'message': f'download success, published msg to {PROJECT_ID} - {topic}'
     })
 
 
