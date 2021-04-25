@@ -62,7 +62,6 @@ def like(id):
 def download():
     request_data = request.get_json()
     url = request_data['url']
-    print(url)
     Downloader.download(url=url)
     return jsonify({
         'message': 'download success'
