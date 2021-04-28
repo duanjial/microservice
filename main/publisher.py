@@ -19,3 +19,11 @@ class PubSubPublisher:
         data = message.encode("utf-8")
         future = self.publisher.publish(self.topic_path, data)
         future.add_done_callback(call_back)
+
+    def is_topic_exist(self, topic_id):
+        topics = self.publisher.list_topics(request={"project": f"projects/{self.project_id}"})
+        for topic in topics:
+            if f"projects/{self.project_id}/topics/{topic_id}" == topic.name:
+                self.topic_path = f"projects/{self.project_id}/topics/{topic_id}"
+                return True
+        return False

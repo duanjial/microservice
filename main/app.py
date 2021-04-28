@@ -14,9 +14,10 @@ CORS(app)
 
 db = SQLAlchemy(app)
 PROJECT_ID = "microservice-311821"
-TOPIC = "download-backup"
+TOPIC = "download"
 publisher = PubSubPublisher(PROJECT_ID)
-publisher.create_topic(TOPIC)
+if not publisher.is_topic_exist(TOPIC):
+    publisher.create_topic(TOPIC)
 
 
 @dataclass
