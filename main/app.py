@@ -14,7 +14,10 @@ CORS(app)
 
 db = SQLAlchemy(app)
 PROJECT_ID = "microservice-311821"
+TOPIC = "download-backup"
 publisher = PubSubPublisher(PROJECT_ID)
+publisher.create_topic(TOPIC)
+
 
 @dataclass
 class Product(db.Model):
@@ -65,12 +68,9 @@ def download():
     request_data = request.get_json()
     url = request_data['url']
     Downloader.download(url=url)
-    print("Finished downloading")
-    topic = "download"
-    # publisher.create_topic(topic)
-    publisher.publish_message(topic, f"new mp4 SUCCESSFULLY downloaded from {url}")
+    publisher.publish_message(f"new mp4 SUCCESSFULLY downloaded from {url}")
     return jsonify({
-        'message': f'download success, published msg to {PROJECT_ID} - {topic}'
+        'message': f'download success, published msg to {PROJECT_ID} - {TOPIC}'
     })
 
 

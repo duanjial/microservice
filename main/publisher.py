@@ -4,16 +4,18 @@ from google.cloud import pubsub_v1
 class PubSubPublisher:
     def __init__(self, project_id):
         self.project_id = project_id
+        self.publisher = pubsub_v1.PublisherClient()
+        self.topic_path = None
 
     def create_topic(self, topic_id):
-        publisher = pubsub_v1.PublisherClient()
-        topic_path = publisher.topic_path(self.project_id, topic_id)
-        topic = publisher.create_topic(request={"name": topic_path})
+        self.topic_path = self.publisher.topic_path(self.project_id, topic_id)
+        topic = self.publisher.create_topic(request={"name": self.topic_path})
         print("Created topic: {}".format(topic.name))
 
-    def publish_message(self, topic_id, message):
-        publisher = pubsub_v1.PublisherClient()
-        topic_path = publisher.topic_path(self.project_id, topic_id)
+    def publish_message(self, message):
+        def call_back(future):
+            message_id = future.result()
+            print(f"Published message {message_id} to {self.topic_path}")
         data = message.encode("utf-8")
-        future = publisher.publish(topic_path, data)
-        print(f"Published message to {topic_path}")
+        future = self.publisher.publish(self.topic_path, data)
+        future.add_done_callback(call_back)
