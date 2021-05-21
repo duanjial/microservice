@@ -75,7 +75,7 @@ def download():
         })
     else:
         return jsonify({
-            'message': f'File already downloaded'
+            'message': 'File already downloaded'
         })
 
 
