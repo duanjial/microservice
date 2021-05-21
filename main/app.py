@@ -71,7 +71,7 @@ def download():
         pubsub_service.create_topic(settings.TOPIC)
         pubsub_service.publish(f"new mp4 SUCCESSFULLY downloaded from {url}")
         return jsonify({
-            'message': f'download success, published msg to {PROJECT_ID} - {TOPIC}'
+            'message': f'download success, published msg to {settings.PROJECT_ID} - {settings.TOPIC}'
         })
     else:
         return jsonify({
