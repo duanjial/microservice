@@ -22,7 +22,7 @@ def download_mp4(file_name):
         return False
     else:
         os.system(
-            f"ffmpeg -protocol_whitelist file,http,https,tcp,tls,crypto \
+            f"ffmpeg -protocol_whitelist file,http,https,tcp,tls,crypto -loglevel quiet\
                  -i ./downloadM3U8/tmp/{file_name} -c copy ./downloadM3U8/videos/{file_name[:-5]}.mp4")
         return True
 
