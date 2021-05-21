@@ -6,13 +6,14 @@ from flask import Flask, jsonify, abort, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy import UniqueConstraint
-from downloader import Downloader
+from services.download_service import DownloadService
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@db/main'
 CORS(app)
 
 db = SQLAlchemy(app)
+download_service = DownloadService()
 PROJECT_ID = "microservice-311821"
 TOPIC = "download"
 publisher = PubSubPublisher(PROJECT_ID)
@@ -68,11 +69,16 @@ def like(id):
 def download():
     request_data = request.get_json()
     url = request_data['url']
-    Downloader.download(url=url)
-    publisher.publish_message(f"new mp4 SUCCESSFULLY downloaded from {url}")
-    return jsonify({
-        'message': f'download success, published msg to {PROJECT_ID} - {TOPIC}'
-    })
+    downloaded = download_service.download_with_url(url=url)
+    if downloaded:
+        publisher.publish_message(f"new mp4 SUCCESSFULLY downloaded from {url}")
+        return jsonify({
+            'message': f'download success, published msg to {PROJECT_ID} - {TOPIC}'
+        })
+    else:
+        return jsonify({
+            'message': f'File already downloaded'
+        })
 
 
 if __name__ == '__main__':
