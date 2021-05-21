@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from producer import publish
+from utils.producer import publish
 import requests
 import settings
 from flask import Flask, jsonify, abort, request
