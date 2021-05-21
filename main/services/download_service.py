@@ -1,4 +1,4 @@
-from downloader import Downloader
+from utils.downloader import Downloader
 
 
 class DownloadService:

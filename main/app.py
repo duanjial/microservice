@@ -1,24 +1,23 @@
 from dataclasses import dataclass
 from producer import publish
-from publisher import PubSubPublisher
 import requests
 from flask import Flask, jsonify, abort, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy import UniqueConstraint
 from services.download_service import DownloadService
+from services.pubsub_service import PubSubService
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'mysql://root:root@db/main'
 CORS(app)
 
-db = SQLAlchemy(app)
-download_service = DownloadService()
 PROJECT_ID = "microservice-311821"
 TOPIC = "download"
-publisher = PubSubPublisher(PROJECT_ID)
-if not publisher.is_topic_exist(TOPIC):
-    publisher.create_topic(TOPIC)
+
+db = SQLAlchemy(app)
+download_service = DownloadService()
+pubsub_service = PubSubService(PROJECT_ID)
 
 
 @dataclass
@@ -71,7 +70,8 @@ def download():
     url = request_data['url']
     downloaded = download_service.download_with_url(url=url)
     if downloaded:
-        publisher.publish_message(f"new mp4 SUCCESSFULLY downloaded from {url}")
+        pubsub_service.create_topic(TOPIC)
+        pubsub_service.publish(f"new mp4 SUCCESSFULLY downloaded from {url}")
         return jsonify({
             'message': f'download success, published msg to {PROJECT_ID} - {TOPIC}'
         })

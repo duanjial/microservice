@@ -6,16 +6,16 @@ from pathlib import Path
 
 
 def download_m3u8_file(url, file_name):
-    if not os.path.exists('./downloadM3U8/tmp'):
-        os.makedirs('./downloadM3U8/tmp')
-    file = os.path.join('./downloadM3U8/tmp', file_name)
+    if not os.path.exists('../downloadM3U8/tmp'):
+        os.makedirs('../downloadM3U8/tmp')
+    file = os.path.join('../downloadM3U8/tmp', file_name)
     with urllib.request.urlopen(url) as response, open(file, 'wb') as outFile:
         shutil.copyfileobj(response, outFile)
 
 
 def download_mp4(file_name):
-    if not os.path.exists('./downloadM3U8/videos'):
-        os.makedirs('./downloadM3U8/videos')
+    if not os.path.exists('../downloadM3U8/videos'):
+        os.makedirs('../downloadM3U8/videos')
     mp4_file = Path(f"./downloadM3U8/videos/{file_name[:-5]}.mp4")
     if mp4_file.is_file():
         print(f"{file_name[:-5]}.mp4 already exist!")
@@ -28,7 +28,7 @@ def download_mp4(file_name):
 
 
 def add_home_url_to_m3u8_file(home_url, file_name):
-    with open(os.path.join('./downloadM3U8/tmp', file_name), 'r') as file:
+    with open(os.path.join('../downloadM3U8/tmp', file_name), 'r') as file:
         lines = file.readlines()
 
     def add_prefix(line):
@@ -37,7 +37,7 @@ def add_home_url_to_m3u8_file(home_url, file_name):
         else:
             return line
     data = list(map(add_prefix, lines))
-    with open(os.path.join('./downloadM3U8/tmp', file_name), 'w') as file:
+    with open(os.path.join('../downloadM3U8/tmp', file_name), 'w') as file:
         file.writelines(data)
 
 

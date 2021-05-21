@@ -8,9 +8,10 @@ class PubSubPublisher:
         self.topic_path = None
 
     def create_topic(self, topic_id):
-        self.topic_path = self.publisher.topic_path(self.project_id, topic_id)
-        topic = self.publisher.create_topic(request={"name": self.topic_path})
-        print("Created topic: {}".format(topic.name))
+        if not self.__is_topic_exist(topic_id):
+            self.topic_path = self.publisher.topic_path(self.project_id, topic_id)
+            topic = self.publisher.create_topic(request={"name": self.topic_path})
+            print("Created topic: {}".format(topic.name))
 
     def publish_message(self, message):
         def call_back(future):
@@ -20,7 +21,7 @@ class PubSubPublisher:
         future = self.publisher.publish(self.topic_path, data)
         future.add_done_callback(call_back)
 
-    def is_topic_exist(self, topic_id):
+    def __is_topic_exist(self, topic_id):
         topics = self.publisher.list_topics(request={"project": f"projects/{self.project_id}"})
         for topic in topics:
             if f"projects/{self.project_id}/topics/{topic_id}" == topic.name:
